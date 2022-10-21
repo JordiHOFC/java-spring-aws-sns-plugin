@@ -14,18 +14,70 @@ technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/
   - "Api"
 types:
   - app
-inputs:
-  - label: Input Example
-    type: text
-    name: example
-    default: any text
-  - label: Example of number
-    type: int
-    name: any_number
-    default: "10"
-  - label: Example of list
-    type: multiselect
-    name: any_list
-    items:
-      - item1
-      - item2
+
+hooks:
+  ##
+  # Parses pom.xml and create some "computed" inputs
+  ##
+  - type: run-script
+    trigger: before-input
+    script: scripts/open-pom.py
+
+  ##
+  # Edit pom.xml
+  ##
+  - type: edit
+    path: pom.xml
+    trigger: after-render    
+    changes:
+      - search:
+          string: "</dependencies>"
+          insert-before:
+            snippet: snippets/snippet-pom.xml
+          when:
+            not-exists-snippet: snippets/snippet-pom.xml
+      - search:
+          string: "</dependencies>"
+          insert-after:
+            snippet: snippets/snippet-pom-dependencyManagement.xml
+          when:
+            not-exists-snippet: snippets/snippet-pom-dependencyManagement.xml
+      - search:
+          string: "</dependencies>"
+          insert-before:
+            snippet: snippets/snippet-pom-dependency-starter-validation.xml
+          when:
+            not-exists: "spring-boot-starter-validation"
+
+  ##
+  # Edit application.yaml
+  ##
+  - type: edit
+    path: src/main/resources/application.yaml
+    trigger: after-render    
+    changes:
+      - insert:
+          line: -1
+          snippet: snippets/snippet-application.yaml
+          when:
+            not-exists-snippet: snippets/snippet-application.yaml
+
+  ##
+  # Edit application-test.yaml
+  ##
+  - type: edit
+    path: src/test/resources/application-test.yaml
+    trigger: after-render 
+    changes:
+      - insert:
+          line: -1
+          snippet: snippets/snippet-application-test.yaml
+          when:
+            not-exists-snippet: snippets/snippet-application-test.yaml   
+  
+  ##
+  # Create or edit docker-compose.yaml
+  ##
+  - type: render-templates
+    trigger: after-render
+    path: snippets/docker-localstack

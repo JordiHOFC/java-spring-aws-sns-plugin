@@ -1,0 +1,8 @@
+
+##
+# Spring Cloud AWS
+##
+cloud:
+    aws:
+        sns:
+            verification: false

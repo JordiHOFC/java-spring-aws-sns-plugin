@@ -1,0 +1,28 @@
+
+##
+# Spring Cloud AWS
+# https://docs.awspring.io/spring-cloud-aws/docs/current/reference/html/appendix.html
+##
+cloud:
+    aws:
+        stack:
+            auto: false
+            enabled: false
+        credentials:
+            access-key: localstackAccessKeyId
+            secret-key: localstackSecretAccessKey
+        region:
+            static: sa-east-1
+        sns:
+            endpoint: http://localhost:4566
+            region: sa-east-1
+            verification: true
+
+logging:
+    level:
+        io.awspring.cloud.messaging.core: info
+        io.awspring.cloud.messaging.listener: info
+        com.amazonaws.services.sns: debug
+
+# Samples configuration
+samples.aws.sns.publisher-topic: paymentConfirmedTopic
