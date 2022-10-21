@@ -18,9 +18,6 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
  * Base class responsible for starting Localstack and configuring it into the application
  * before tests are executed
  */
-//@SpringBootTest(webEnvironment = DEFINED_PORT, properties = {
-//        "server.port=18080"
-//})
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
 @Testcontainers
