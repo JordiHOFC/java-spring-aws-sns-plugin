@@ -1,4 +1,4 @@
-package br.com.zup.app1.xxx.samples.aws.sns.model;
+package {{application_package}}.samples.aws.sns.model;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;

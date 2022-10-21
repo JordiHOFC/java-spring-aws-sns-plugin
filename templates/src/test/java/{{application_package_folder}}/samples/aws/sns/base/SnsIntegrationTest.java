@@ -1,4 +1,4 @@
-package br.com.zup.app1.xxx.samples.aws.sns.base;
+package {{application_package}}.samples.aws.sns.base;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;

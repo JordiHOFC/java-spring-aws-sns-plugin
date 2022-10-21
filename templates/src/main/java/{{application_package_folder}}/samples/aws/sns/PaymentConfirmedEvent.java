@@ -1,7 +1,7 @@
-package br.com.zup.app1.xxx.samples.aws.sns;
+package {{application_package}}.samples.aws.sns;
 
-import br.com.zup.app1.xxx.samples.aws.sns.model.Payment;
-import br.com.zup.app1.xxx.samples.aws.sns.model.PaymentStatus;
+import {{application_package}}.samples.aws.sns.model.Payment;
+import {{application_package}}.samples.aws.sns.model.PaymentStatus;
 
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;

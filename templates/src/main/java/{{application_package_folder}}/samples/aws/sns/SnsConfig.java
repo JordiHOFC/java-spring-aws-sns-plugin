@@ -1,4 +1,4 @@
-package br.com.zup.app1.xxx.samples.aws.sns;
+package {{application_package}}.samples.aws.sns;
 
 import com.amazonaws.services.sns.AmazonSNS;
 import com.fasterxml.jackson.databind.ObjectMapper;

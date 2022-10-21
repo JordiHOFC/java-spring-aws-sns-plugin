@@ -1,7 +1,7 @@
-package br.com.zup.app1.xxx.samples.aws.sns;
+package {{application_package}}.samples.aws.sns;
 
-import br.com.zup.app1.xxx.samples.aws.sns.base.SnsIntegrationTest;
-import br.com.zup.app1.xxx.samples.aws.sns.model.PaymentRepository;
+import {{application_package}}.samples.aws.sns.base.SnsIntegrationTest;
+import {{application_package}}.samples.aws.sns.model.PaymentRepository;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.SubscribeRequest;

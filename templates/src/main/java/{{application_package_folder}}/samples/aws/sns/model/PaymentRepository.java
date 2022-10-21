@@ -1,6 +1,6 @@
-package br.com.zup.app1.xxx.samples.aws.sns.model;
+package {{application_package}}.samples.aws.sns.model;
 
-import br.com.zup.app1.xxx.samples.aws.sns.model.Payment;
+import {{application_package}}.samples.aws.sns.model.Payment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
