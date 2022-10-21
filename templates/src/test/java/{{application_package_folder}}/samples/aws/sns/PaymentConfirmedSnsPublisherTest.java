@@ -5,7 +5,6 @@ import {{application_package}}.samples.aws.sns.model.PaymentRepository;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.SubscribeRequest;
-import com.amazonaws.services.sns.model.SubscribeResult;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +42,7 @@ class PaymentConfirmedSnsPublisherTest extends SnsIntegrationTest {
     public void setUp() {
         repository.deleteAll();
         CREATED_TOPIC = SNS.createTopic(topicName);
-        SubscribeResult r = SNS.subscribe(new SubscribeRequest(
+        SNS.subscribe(new SubscribeRequest(
                         CREATED_TOPIC.getTopicArn(),
                         "http",
                         getLocalServerDockerEndpointFor("/payments/confirmed/topic-subscriber")
@@ -114,7 +113,6 @@ class PaymentConfirmedSnsPublisherTest extends SnsIntegrationTest {
             paymentConfirmedSnsPublisher.publish(invalidEvent, subject);
         });
 
-        // validation
         // validation
         assertThat(exception)
                 .hasMessageContainingAll(
