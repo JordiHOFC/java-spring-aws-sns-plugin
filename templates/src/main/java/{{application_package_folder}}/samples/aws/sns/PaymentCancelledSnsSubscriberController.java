@@ -18,37 +18,39 @@ import org.springframework.web.bind.annotation.RestController;
  * with messages sent to topic.
  */
 @RestController
-@RequestMapping("/payments/confirmed/topic-subscriber")
-public class PaymentConfirmedSnsSubscriberController {
+@RequestMapping("/payments/cancelled/topic-subscriber")
+public class PaymentCancelledSnsSubscriberController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentConfirmedSnsSubscriberController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentCancelledSnsSubscriberController.class);
 
     private final PaymentRepository repository;
 
-    public PaymentConfirmedSnsSubscriberController(PaymentRepository repository) {
+    public PaymentCancelledSnsSubscriberController(PaymentRepository repository) {
         this.repository = repository;
     }
 
     @NotificationMessageMapping
     public void handleNotificationMessage(@NotificationSubject String subject,
-                                          @NotificationMessage PaymentConfirmedEvent message) {
+                                          @NotificationMessage PaymentCancelledEvent message) {
         // handle message
         LOGGER.info(
                 "Receiving notification from {} with payload: {}",
                 subject, message
         );
 
-        // converts to domain model and invokes the business logic
-        Payment payment = message.toModel();
+        // finds the payment and cancels it
+        Payment payment = repository.findById(message.id());
+        payment.cancel();
+
         repository.save(payment);
     }
 
 
     @NotificationSubscriptionMapping
     public void handleSubscriptionMessage(NotificationStatus notificationStatus) {
-        LOGGER.info("Handling subscription message...");
-        notificationStatus
-                .confirmSubscription();
+            LOGGER.info("Handling subscription message...");
+            notificationStatus
+                    .confirmSubscription();
     }
 
     @NotificationUnsubscribeConfirmationMapping

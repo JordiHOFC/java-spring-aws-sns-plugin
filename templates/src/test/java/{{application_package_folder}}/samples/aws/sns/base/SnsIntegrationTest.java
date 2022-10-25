@@ -2,6 +2,7 @@ package {{application_package}}.samples.aws.sns.base;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -12,6 +13,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SNS;
+import static org.testcontainers.containers.localstack.LocalStackContainer.Service.SQS;
 
 /**
  * Base class responsible for starting Localstack and configuring it into the application
@@ -19,22 +21,26 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
  */
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ActiveProfiles("test")
-@Testcontainers
+@Testcontainers @DirtiesContext
 public abstract class SnsIntegrationTest {
 
     private static DockerImageName LOCALSTACK_IMAGE = DockerImageName.parse("localstack/localstack");
 
     @Container
     public static LocalStackContainer LOCALSTACK_CONTAINER = new LocalStackContainer(LOCALSTACK_IMAGE)
-                                                                    .withServices(SNS);
+                                                                    .withServices(SNS, SQS);
 
     /**
-     * Just configures Localstack's SNS server endpoint in the application
+     * Just configures Localstack's server endpoints in the application
      */
     @DynamicPropertySource
-    static void registerSnsProperties(DynamicPropertyRegistry registry) {
+    static void registerProperties(DynamicPropertyRegistry registry) {
+        // SNS
         registry.add("cloud.aws.sns.endpoint",
                 () -> LOCALSTACK_CONTAINER.getEndpointOverride(SNS).toString());
+        // SQS
+        registry.add("cloud.aws.sqs.endpoint",
+                () -> LOCALSTACK_CONTAINER.getEndpointOverride(SQS).toString());
     }
 
     @LocalServerPort

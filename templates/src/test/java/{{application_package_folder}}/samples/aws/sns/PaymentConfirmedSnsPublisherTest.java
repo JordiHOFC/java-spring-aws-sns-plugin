@@ -1,10 +1,12 @@
 package {{application_package}}.samples.aws.sns;
 
 import {{application_package}}.samples.aws.sns.base.SnsIntegrationTest;
-import {{application_package}}.samples.aws.sns.model.PaymentRepository;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.SubscribeRequest;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.model.CreateQueueResult;
+import com.amazonaws.services.sqs.model.GetQueueAttributesResult;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,46 +14,53 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.DefaultLocale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.annotation.DirtiesContext;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static java.util.List.of;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+@DirtiesContext
 class PaymentConfirmedSnsPublisherTest extends SnsIntegrationTest {
 
     @Autowired
-    private PaymentConfirmedSnsPublisher paymentConfirmedSnsPublisher;
-
-    @Autowired
-    private PaymentRepository repository;
-
-    @Autowired
     private AmazonSNS SNS;
+    @Autowired
+    private AmazonSQS SQS;
 
     @Value("${samples.aws.sns.publisher-topic}")
     private String topicName;
 
+    @Autowired
+    private PaymentConfirmedSnsPublisher paymentConfirmedSnsPublisher;
+
     private CreateTopicResult CREATED_TOPIC;
+    private CreateQueueResult CREATED_QUEUE;
 
     @BeforeEach
     public void setUp() {
-        repository.deleteAll();
+        // creates the production topic...
         CREATED_TOPIC = SNS.createTopic(topicName);
+        // ...and subscribes to it using a test-only SQS queue
+        CREATED_QUEUE = SQS.createQueue("testResultQueue");
         SNS.subscribe(new SubscribeRequest(
                         CREATED_TOPIC.getTopicArn(),
-                        "http",
-                        getLocalServerDockerEndpointFor("/payments/confirmed/topic-subscriber")
+                        "sqs",
+                        CREATED_QUEUE.getQueueUrl()
                 )
         );
     }
 
     @AfterEach
     public void cleanUp() {
+        // don't forget to clean up both topic and queue
+        SQS.deleteQueue(CREATED_QUEUE.getQueueUrl());
         SNS.deleteTopic(CREATED_TOPIC.getTopicArn());
     }
 
@@ -72,10 +81,7 @@ class PaymentConfirmedSnsPublisherTest extends SnsIntegrationTest {
 
         // validation
         await().atMost(3, SECONDS).untilAsserted(() -> {
-            assertThat(repository.findAll())
-                    .hasSize(1)
-                    .usingRecursiveFieldByFieldElementComparator()
-                    .containsExactly(event.toModel());
+            assertThat(numberOfMessagesInQueue()).isEqualTo(1);
         });
     }
 
@@ -93,6 +99,9 @@ class PaymentConfirmedSnsPublisherTest extends SnsIntegrationTest {
                 .hasMessage("event can not be null");
 
         // ...and verify any side-effects if needed
+        await().atMost(3, SECONDS).untilAsserted(() -> {
+            assertThat(numberOfMessagesInQueue()).isEqualTo(0);
+        });
     }
 
     @Test
@@ -121,6 +130,18 @@ class PaymentConfirmedSnsPublisherTest extends SnsIntegrationTest {
                 );
 
         // ...and verify any side-effects if needed
+        await().atMost(3, SECONDS).untilAsserted(() -> {
+            assertThat(numberOfMessagesInQueue()).isEqualTo(0);
+        });
+    }
+
+    private Integer numberOfMessagesInQueue() {
+        GetQueueAttributesResult attributes = SQS
+                .getQueueAttributes(CREATED_QUEUE.getQueueUrl(), of("All"));
+
+        return Integer.parseInt(
+                attributes.getAttributes().get("ApproximateNumberOfMessages")
+        );
     }
 
 }

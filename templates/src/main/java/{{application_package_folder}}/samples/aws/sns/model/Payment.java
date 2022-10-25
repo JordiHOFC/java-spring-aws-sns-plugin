@@ -6,6 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
+import static {{application_package}}.samples.aws.sns.model.PaymentStatus.*;
+
 public class Payment {
 
     @NotNull
@@ -16,7 +18,10 @@ public class Payment {
     private final LocalDateTime createdAt;
 
     @NotNull
-    private final PaymentStatus status;
+    private PaymentStatus status;
+
+    @Past
+    private LocalDateTime cancelledAt;
 
 
     /**
@@ -62,6 +67,16 @@ public class Payment {
                 "id=" + id +
                 ", createdAt=" + createdAt +
                 ", status=" + status +
+                ", cancelledAt=" + cancelledAt +
                 '}';
     }
+
+    /**
+     * Cancels this payment
+     */
+    public void cancel() {
+        this.status = CANCELLED;
+        this.cancelledAt = LocalDateTime.now();
+    }
+
 }

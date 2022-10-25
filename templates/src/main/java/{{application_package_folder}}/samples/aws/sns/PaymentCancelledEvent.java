@@ -1,13 +1,12 @@
 package {{application_package}}.samples.aws.sns;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record PaymentConfirmedEvent(
+public record PaymentCancelledEvent(
         @NotNull UUID id,
-        @NotEmpty @Size(max = 120) String description,
-        @NotNull @PositiveOrZero Double amount,
         @NotNull @Past LocalDateTime createdAt
 ) {
 

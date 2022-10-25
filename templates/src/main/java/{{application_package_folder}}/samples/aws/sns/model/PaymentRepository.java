@@ -1,6 +1,5 @@
 package {{application_package}}.samples.aws.sns.model;
 
-import {{application_package}}.samples.aws.sns.model.Payment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -29,7 +28,7 @@ public class PaymentRepository {
 
     public Payment save(@Valid Payment payment) {
         LOGGER.info(
-            "Persisting a new payment into database: {}", payment
+            "Saving a payment into database: {}", payment
         );
         DATABASE.put(payment.getId(), payment);
         return payment;
