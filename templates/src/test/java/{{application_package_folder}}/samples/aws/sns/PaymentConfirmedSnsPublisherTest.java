@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.DefaultLocale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.annotation.DirtiesContext;
 
 import javax.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
@@ -26,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DirtiesContext
 class PaymentConfirmedSnsPublisherTest extends SnsIntegrationTest {
 
     @Autowired
