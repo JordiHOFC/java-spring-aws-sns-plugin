@@ -1,6 +1,6 @@
-package br.com.zup.edu.app2.xxx.samples.aws.sns.utils;
+package {{application_package}}.samples.aws.sns.utils;
 
-import br.com.zup.edu.app2.xxx.samples.aws.sns.PaymentConfirmedSnsPublisher;
+import {{application_package}}.samples.aws.sns.PaymentConfirmedSnsPublisher;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.core.MessagePostProcessor;
