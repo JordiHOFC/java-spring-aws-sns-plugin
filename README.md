@@ -1,8 +1,3 @@
-
-https://cloudaffaire.com/faq/how-can-i-access-a-service-running-on-wsl2-from-inside-a-docker-container/
-
-https://github.com/docker/for-win/issues/12673
-
 ## Java Spring AWS SNS Plugin
 
 The **java-spring-aws-sns-plugin** is a plugin to enable and configure Spring Cloud AWS SNS in Spring Boot Java application.
