@@ -6,10 +6,10 @@ category: backend # Ref: https://docs.stackspot.com/latest/docs/creators-guide/y
 compatibility:
   - java
   - spring
-about: docs/about.md
-usage: docs/usage.md
-use-case: docs/use-case.md
-implementation: docs/implementation.md
+about: docs/pt-br/doc.md
+usage: docs/pt-br/doc.md
+use-case: docs/pt-br/doc.md
+implementation: docs/pt-br/doc.md
 technologies: # Ref: https://docs.stackspot.com/latest/docs/creators-guide/yaml/#technologies
   - "Api"
 types:
