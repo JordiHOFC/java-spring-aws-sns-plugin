@@ -11,7 +11,7 @@ Below is a summary of each section of this documentation.
 
 1. [Plugin Core Technologies](#plugin-core-technologies)
 2. [Capabilities Enabled when using the Plugin](#what-are-the-capabilities-enabled)
-3. [Benefits of using the Plugin](#what-the-benefits-of-using-java-spring-aws-sns-plugin)
+3. [Benefits of using the Plugin](#what-are-the-benefits-of-using-java-spring-aws-sns-plugin)
 4. [Applying Java Spring AWS SNS Plugin](#applying-java-spring-aws-sns-plugin)
 
 
