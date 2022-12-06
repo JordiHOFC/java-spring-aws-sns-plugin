@@ -4,7 +4,6 @@ import {{application_package}}.samples.aws.sns.base.SnsIntegrationTest;
 import {{application_package}}.samples.aws.sns.model.Payment;
 import {{application_package}}.samples.aws.sns.model.PaymentRepository;
 import {{application_package}}.samples.aws.sns.model.PaymentStatus;
-import {{application_package}}.samples.aws.sns.utils.FixHeadersMessagePostProcessor;
 import com.amazonaws.services.sns.AmazonSNS;
 import com.amazonaws.services.sns.model.CreateTopicResult;
 import com.amazonaws.services.sns.model.SubscribeRequest;
@@ -69,8 +68,7 @@ class PaymentCancelledSnsSubscriberControllerTest extends SnsIntegrationTest {
 
         // action
         messagingTemplate
-                .convertAndSend("testResultTopic", event,
-                        new FixHeadersMessagePostProcessor(subject));
+                .sendNotification("testResultTopic", event, subject);
 
         // validation
         await().atMost(3, SECONDS).untilAsserted(() -> {

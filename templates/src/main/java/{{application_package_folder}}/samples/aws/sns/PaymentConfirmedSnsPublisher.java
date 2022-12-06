@@ -1,6 +1,5 @@
 package {{application_package}}.samples.aws.sns;
 
-import {{application_package}}.samples.aws.sns.utils.FixHeadersMessagePostProcessor;
 import io.awspring.cloud.messaging.core.NotificationMessagingTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +38,7 @@ public class PaymentConfirmedSnsPublisher {
 
         LOGGER.info("Sending a notification from {} to SNS topic {}", subject, event);
         messagingTemplate
-                .convertAndSend(topicName, event, new FixHeadersMessagePostProcessor(subject));
+                .sendNotification(topicName, event, subject);
     }
 
 }

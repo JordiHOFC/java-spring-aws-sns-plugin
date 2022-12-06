@@ -24,7 +24,7 @@ import static org.testcontainers.containers.localstack.LocalStackContainer.Servi
 @Testcontainers @DirtiesContext
 public abstract class SnsIntegrationTest {
 
-    private static DockerImageName LOCALSTACK_IMAGE = DockerImageName.parse("localstack/localstack");
+    private static DockerImageName LOCALSTACK_IMAGE = DockerImageName.parse("localstack/localstack:1.3");
 
     @Container
     public static LocalStackContainer LOCALSTACK_CONTAINER = new LocalStackContainer(LOCALSTACK_IMAGE)
